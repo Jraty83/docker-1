@@ -52,15 +52,56 @@ INSTALL DOCKER:
 			   This message shows that your installation appears to be working correctly.
 			   ...
 
-06:		docker run --name overlord --restart always -p 192.168.99.100:5000:80 -d nginx
-			--name <name>				(give a specific name to your container)
-			--restart <policy> 			(set restart policy)
-			-p <ip-de-char>:5000:80		(binds port 80 of the container to port 5000 on 192.168.99.100 of the host machine)
-			-d							(run in background = detached mode)
+06:		docker run --name overlord --restart always -p 5000:80 -d nginx
+			--name <name>			(give a specific name to your container)
+			--restart <policy> 		(set restart policy)
+			-p 5000:80				(binds port 80 of the container to port 5000 of the host machine)
+					** -p <ip-de-char>:5000:80 (you can specify host's ip 192.168.99.100)
+			-d						(run in background = detached mode)
 
 		TEST: http://<ip-de-char>:5000 on your web browser.
+			-> Welcome to nginx! ...
 
-07:		
+07:		docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <name>
+			(-> docker start overlord) if necessary
+
+08:		docker run -it --rm alpine
+			-i						Interactive mode (Keep STDIN open even if not attached)
+					* -t			Allocate a pseudo-TTY
+			--rm 					(automatically remove the container when it exits)
+
+09:		docker run -it --rm debian
+		apt-get update -y && apt-get upgrade -y
+		apt-get install build-essential vim git -y
+			* gcc --version			(to check you have gcc installed properly)
+			* git --version			(to check you have git installed properly)
+		
+10:		docker volume create --name hatchery
+			* docker volume ls		(to check volumes)
+
+11:		docker volume ls -q
+
+12:		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ######################################################################################################################################################################
@@ -69,6 +110,8 @@ USEFUL COMMANDS:
 
 • docker ps (to see active/running containers)
 • docker ps -a (to see all containers)
+
+• docker inspect <name> (to see container's configs)
 
 • docker stop <name> (stop container(s)) - use "NAMES"
 
