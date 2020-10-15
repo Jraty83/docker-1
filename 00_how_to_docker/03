@@ -1,0 +1,3 @@
+eval $(docker-machine env Char)
+
+#(docker-machine regenerate-certs Char) - to regenerate certs if necessary

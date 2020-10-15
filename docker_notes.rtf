@@ -1,0 +1,75 @@
+######################################################################################################################################################################
+
+INSTALL HOMEBREW:
+
+• rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc && source $HOME/.zshrc && brew update
+
+######################################################################################################################################################################
+
+MOVE VM MACHINES FOLDER (AND SOFTLINK):
+
+• mv VirtualBox\ VMs /goinfre/jraty (in /Users/jraty)
+• ln -s /goinfre/jraty/VirtualBox\ VMs $HOME
+
+######################################################################################################################################################################
+
+INSTALL DOCKER:
+
+• brew install docker
+(• mkdir /Users/jraty/.docker)
+• mv .docker/ /goinfre/jraty (in /Users/jraty)
+• ln -s /goinfre/ismelich/.docker $HOME
+
+(docker version)
+	Client: Docker Engine - Community
+	Version:           19.03.13
+	...
+(docker-machine version)
+	docker-machine version 0.16.2, build bd45ab1
+
+######################################################################################################################################################################
+
+00_HOW_TO_DOCKER:
+
+01:		docker-machine create Char
+
+02:		docker-machine ip Char
+
+03:		eval $(docker-machine env Char) - you have to create the environment for EACH terminal!!
+		(env
+			-> DOCKER_TLS_VERIFY=1
+			   DOCKER_HOST=tcp://192.168.99.101:2376
+			   export=
+			   DOCKER_CERT_PATH=/Users/jraty/.docker/machine/machines/Char
+			   DOCKER_MACHINE_NAME=Char)
+
+		(docker-machine regenerate-certs Char) - to regenerate certs if necessary
+
+04:		docker pull hello-world
+
+05:		docker run hello-world
+			-> Hello from Docker!
+			   This message shows that your installation appears to be working correctly.
+			   ...
+
+06:		docker run --name overlord --restart always -p 192.168.99.100:5000:80 -d nginx
+			--name <name>				(give a specific name to your container)
+			--restart <policy> 			(set restart policy)
+			-p <ip-de-char>:5000:80		(binds port 80 of the container to port 5000 on 192.168.99.100 of the host machine)
+			-d							(run in background = detached mode)
+
+		TEST: http://<ip-de-char>:5000 on your web browser.
+
+07:		
+
+
+######################################################################################################################################################################
+
+USEFUL COMMANDS:
+
+• docker ps (to see active/running containers)
+• docker ps -a (to see all containers)
+
+• docker stop <name> (stop container(s)) - use "NAMES"
+
+• docker-machine rm <name> (to remove a machine)
