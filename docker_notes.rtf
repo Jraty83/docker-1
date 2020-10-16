@@ -81,16 +81,56 @@ INSTALL DOCKER:
 
 11:		docker volume ls -q
 
-12:		
+12:		docker run --name spawning-pool --mount source=hatchery,target=/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Kerrigan -e MYSQL_DATABASE=zerglings --restart on-failure -d mysql
+			-> bash 13
+					MYSQL_ROOT_PASSWORD=Kerrigan
+					MYSQL_DATABASE=zerglings
+			-> docker inspect spawning-pool
+					"Mounts": [
+					{
+						"Type": "volume",
+						"Source": "hatchery",
+						"Target": "/var/lib/mysql"
+					...
+			-> docker inspect -f {{.HostConfig.RestartPolicy}} spawning-pool
+					{on-failure 0}
+			-> docker exec -it spawning-pool mysql -uroot -p
+					-> mysql> show databases;
+							+--------------------+
+							| Database           |
+							+--------------------+
+							| information_schema |
+							| mysql              |
+							| performance_schema |
+							| sys                |
+							| zerglings          |
+							+--------------------+
+							5 rows in set (0.02 sec)
 
+13:		docker exec spawning-pool printenv
 
+14:		docker run --name lair --link spawning-pool:mysql -p 8080:80 -d wordpress
+			-> http://192.168.99.100:8080/
 
+15:		docker run --name roach-warden --link spawning-pool:db -p 8081:80 -d phpmyadmin
+			-> http://192.168.99.100:8081/
+					Username:	root
+					Password:	Kerrigan
 
+16:		docker logs -f spawning-pool
 
+17:		docker ps
 
+18:		docker restart overlord
+			-> docker exec -it overlord /bin/sh -c "kill 1"
+			-> docker inspect -f {{.RestartCount}} overlord
+					1 (kill again ... 2 ...3)
 
+19:		docker run --name Abathur -it -v /host/home:/root -p 3000:3000 python:2-slim /bin/sh
 
-
+		once inside Abathur:
+			-> apt update && apt upgrade -y && pip install --upgrade pip && pip install flask && apt install vim -y
+			
 
 
 

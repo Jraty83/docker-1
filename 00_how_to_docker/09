@@ -1,4 +1,4 @@
+#docker run -it --rm debian
+
 apt-get update -y && apt-get upgrade -y
 apt-get install build-essential vim git -y
-
-#docker run -it --rm debian
