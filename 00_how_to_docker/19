@@ -1,0 +1,3 @@
+docker run --name Abathur -it -v /host/home:/root -p 3000:3000 python:2-slim /bin/sh
+
+apt update && apt upgrade -y && pip install --upgrade pip && pip install flask && apt install vim -y
