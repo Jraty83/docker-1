@@ -126,19 +126,87 @@ INSTALL DOCKER:
 			-> docker inspect -f {{.RestartCount}} overlord
 					1 (kill again ... 2 ...3)
 
-19:		docker run --name Abathur -it -v /host/home:/root -p 3000:3000 python:2-slim /bin/sh
+19:		docker run --name Abathur -dit -v $HOME:/root -p 3000:3000 python:2-slim
+		docker exec Abathur pip install flask
+		echo 'from flask import Flask\napp = Flask(__name__)\n@app.route("/")\ndef hello_world():\n\treturn "<h1>Hello World</h1>"' > ~/app.py
+		docker exec -e FLASK_APP=/root/app.py Abathur flask run --host=0.0.0.0 --port 3000
 
-		once inside Abathur:
-			-> apt update && apt upgrade -y && pip install --upgrade pip && pip install flask && apt install vim -y
-			
+20:		docker swarm init --advertise-addr $(docker-machine ip Char)
+			-> docker info
+					...
+					Swarm: active
+					NodeID: m4oj1ubr4k4681j4y0y8307z3
+					Is Manager: true
+					ClusterID: iefibruzxae1u79y79zfyh1h7
+					Managers: 1
+					Nodes: 1
+					...
+			-> docker node ls
+					ID								HOSTNAME	STATUS	AVAILABILITY	MANAGER STATUS	ENGINE VERSION
+					m4oj1ubr4k4681j4y0y8307z3 *		Char		Ready	Active			Leader			19.03.12
+			-> docker swarm leave --force (to leave a swarm)
 
+21:		docker-machine create --driver virtualbox Aiur
 
+22:		docker-machine ssh Aiur "docker swarm join --token $(docker swarm join-token worker -q) $(docker-machine ip Char):2377"
+			-> docker node ls
+					ID								HOSTNAME	STATUS	AVAILABILITY	MANAGER STATUS	ENGINE VERSION
+					8p1xupywwrqqgjfs5642pcjp0		Aiur		Ready	Active							19.03.12
+					m4oj1ubr4k4681j4y0y8307z3 *		Char		Ready	Active			Leader			19.03.12
 
+23:		docker network create -d overlay --internal overmind
+			-> docker network ls
+			-> docker network inspect overmind
+					...
+					"Internal": true,
 
+24:		docker service create --name orbital-command --network overmind -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq
+			-> docker service ps orbital-command
+					Running
+			-> docker service inspect -f {{.Spec.TaskTemplate.ContainerSpec.Env}} orbital-command
+					[RABBITMQ_DEFAULT_USER=user RABBITMQ_DEFAULT_PASS=password]
 
+25:		docker service ls
 
+26:		docker service create --name engineering-bay --network overmind --replicas=2 -e OC_USERNAME=user -e OC_PASSWD=password 42school/engineering-bay
+			-> docker service ls
+					REPLICAS
+					2/2
+			-> docker service ps engineering-bay
+					engineering-bay.1		Running
+					engineering-bay.2		Running
+			-> docker service inspect -f "{{.Spec.TaskTemplate.ContainerSpec.Env}}" engineering-bay
+					[OC_USERNAME=user OC_PASSWD=password]
 
+27:		docker service logs -f engineering-bay
 
+28:		docker service create --name marines --network overmind --replicas=2 -e OC_USERNAME=user -e OC_PASSWD=password 42school/marine-squad
+			-> docker service inspect -f "{{.Spec.TaskTemplate.ContainerSpec.Env}}" marines 
+					[OC_USERNAME=user OC_PASSWD=password]
+			-> docker service logs -f marines
+			-> docker service logs marines
+
+29:		docker service ps marines
+
+30:		docker service scale marines=20
+			-> docker service ps marines
+					20 Running services
+			-> docker service logs -f marines
+
+31:		docker service rm $(docker service ls -q)
+			-> docker service ls
+					NO services...
+
+32:		docker rm -f $(docker ps -a -q)
+			-> docker ps
+			-> docker ps -a
+					NO containers...
+
+33:		docker rmi $(docker images -a -q)
+		-> docker image ls
+					NO images...
+
+34:		docker-machine rm Aiur -y
 
 
 
@@ -147,6 +215,8 @@ INSTALL DOCKER:
 ######################################################################################################################################################################
 
 USEFUL COMMANDS:
+
+• docker-machine ls (to list docker machines)
 
 • docker ps (to see active/running containers)
 • docker ps -a (to see all containers)
