@@ -203,10 +203,42 @@ INSTALL DOCKER:
 					NO containers...
 
 33:		docker rmi $(docker images -a -q)
-		-> docker image ls
+			-> docker image ls
 					NO images...
 
 34:		docker-machine rm Aiur -y
+			-> docker-machine ls
+					NO MORE Aiur...
+
+######################################################################################################################################################################
+
+01_DOCKERFILES:
+
+ex00:	MY DOCKERFILE:
+			FROM alpine:latest
+			RUN apk update \
+				&& apk add vim
+			ENTRYPOINT ["vi", "test.c"]
+
+		TO BUILD THE IMAGE:
+		docker build -t <name> .
+			(OR		docker build -t <name> -f /path/to/Dockerfile .)
+		
+		TO CHECK:
+		docker image ls
+				REPOSITORY		TAG			IMAGE ID			CREATED				SIZE
+				simpanssi		latest		c5767044cd8a		4 seconds ago		34.3MB
+				alpine			latest		a24bb4013296		4 months ago		5.57MB
+		
+		docker run -it --name <name> <image>
+		-> docker ps
+				CONTAINER ID	IMAGE		COMMAND				CREATED				STATUS			PORTS		NAMES
+				3ab543515667	simpanssi	"vi test.c"			3 seconds ago		Up 2 seconds				gg
+
+ex01:	
+
+
+
 
 
 
