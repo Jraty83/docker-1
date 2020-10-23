@@ -235,10 +235,53 @@ ex00:	MY DOCKERFILE:
 				CONTAINER ID	IMAGE		COMMAND				CREATED				STATUS			PORTS		NAMES
 				3ab543515667	simpanssi	"vi test.c"			3 seconds ago		Up 2 seconds				gg
 
-ex01:	
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+ex01:	MY DOCKERFILE:
+			FROM debian
+			ENV TS3SERVER_LICENSE=accept
+			WORKDIR /home/teamspeak
+			EXPOSE 9987/udp 10011 30033
+			RUN apt-get update && \
+				apt-get upgrade -y && \
+				apt-get install -y wget bzip2 && \
+				wget http://dl.4players.de/ts/releases/3.0.13.4/teamspeak3-server_linux_amd64-3.0.13.4.tar.bz2 && \
+				tar -xvf teamspeak3-server_linux_amd64-3.0.13.4.tar.bz2
+			WORKDIR teamspeak3-server_linux_amd64
+			#ENTRYPOINT sh ts3server_minimal_runscript.sh
+			ENTRYPOINT sh ts3server_startscript.sh
+		
+		TO BUILD THE IMAGE:
+		docker build -t <name> .
 
+		TO RUN THE SERVER:
+		docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -e TS3SERVER_LICENSE=accept -d <image>
 
+		TO CHECK:
+		docker image ls
+				REPOSITORY		TAG			IMAGE ID			CREATED				SIZE
+				paviaani		latest		b69ede3371ef		17 minutes ago		164MB
+				debian			latest		1510e8501783		8 days ago			114MB
+
+		docker ps
+				CONTAINER ID	IMAGE		COMMAND					CREATED			STATUS			PORTS																		NAMES
+				1288bb8acc5d	paviaani	"/bin/sh -c 'sh ts3s…"	4 minutes ago	Up 4 minutes	0.0.0.0:10011->10011/tcp, 0.0.0.0:9987->9987/udp, 0.0.0.0:30033->30033/tcp	my_teamspeak
+
+		docker logs <name> (to check the log and/or admin password etc.)
+
+		OPEN TEAMSPEAK 3 CLIENT:
+		(ts3server://192.168.99.100:10011)
+	
+		-> Connections-> Connect (from menu bar)
+		-> Server Nickname or Address = Your VM (Char) IP
+		-> Server Password = token=XnShb8BAcoDJOiHo4oaYRE+OGxuz5BpoGXrdAFQ+ (the whole thing... from logs)
+		-> Nickname = serveradmin (or choose one...)
+		-> Connect
+			-> Privilege Key = token=XnShb8BAcoDJOiHo4oaYRE+OGxuz5BpoGXrdAFQ+ (same as server password)
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ex02:	
 
 
 
