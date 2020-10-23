@@ -9,3 +9,5 @@ RUN apt-get update && \
 	tar -xvf teamspeak3-server_linux_amd64-3.12.1.tar.bz2
 WORKDIR teamspeak3-server_linux_amd64
 ENTRYPOINT sh ts3server_minimal_runscript.sh
+
+#docker build -t <image> . && docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -d <image>

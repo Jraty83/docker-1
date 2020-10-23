@@ -255,7 +255,8 @@ ex01:	MY DOCKERFILE:
 		docker build -t <name> .
 
 		TO RUN THE SERVER:
-		docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -e TS3SERVER_LICENSE=accept -d <image>
+		docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -d <image>
+		#docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -e TS3SERVER_LICENSE=accept -d <image>
 
 		TO CHECK:
 		docker image ls
@@ -281,7 +282,63 @@ ex01:	MY DOCKERFILE:
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-ex02:	
+ex02:	Create ft-rails/ subfolder (for a Dockerfile in a Dockerfile...)
+		
+		DOCKERFILE (IN /FT-RAILS):
+				FROM ruby:2.5.1
+				RUN apt-get update && apt-get install -y nodejs
+				RUN gem install rails --version 5.2.0
+				RUN mkdir -p /opt/app
+				COPY app /opt/app										(works once you've downloaded the app)
+				ONBUILD WORKDIR /opt/app								(set the working directory)
+				ONBUILD RUN bundle install
+				ONBUILD RUN rake db:create								(create a database)
+				ONBUILD RUN rake db:migrate								(setup the tables in the database)
+				ONBUILD RUN rake db:seed								(load default data to your application)
+
+		DOCKERFILE (IN "ROOT"):
+				FROM ft-rails:on-build									(use previously built image as a base and launch the ONBUILD triggers)
+
+				EXPOSE 3000												(indicate the port on which the container listens for connections)
+				CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000"]		(bind all IPv4 addresses on the local machine and port 3000 to the server)
+
+		RUN.SH SCRIPT (IN "ROOT"):
+				cd ft-rails/															(goto ft-rails/)
+				git clone https://github.com/RailsApps/rails-signup-thankyou.git app	(get the app from git)
+				docker build -t ft-rails:on-build .										(build first image and set triggers)
+				cd ..																	(goto "root")
+				docker build -t ex02 .													(build the final image using ONBUILD triggers)
+				docker run --name my_rubyapp -p 3000:3000 -d ex02						(run the server, in detached mode)
+
+		-> http://192.168.99.100:3000/
+
+		docker logs -f <image>
+				=> Booting Puma
+				=> Rails 5.2.0 application starting in development 
+				=> Run `rails server -h` for more startup options
+				Puma starting in single mode...
+				* Version 3.11.4 (ruby 2.5.1-p57), codename: Love Song
+				* Min threads: 5, max threads: 5
+				* Environment: development
+				* Listening on tcp://0.0.0.0:3000
+				Use Ctrl-C to stop
+		
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ex03:	
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -295,6 +352,9 @@ USEFUL COMMANDS:
 
 • docker ps (to see active/running containers)
 • docker ps -a (to see all containers)
+
+• docker exec <container> <command> (docker ps, to see running containers)
+	-> docker exec my_teamspeak ls -l
 
 • docker inspect <name> (to see container's configs)
 
