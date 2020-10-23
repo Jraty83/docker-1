@@ -300,7 +300,7 @@ ex02:	Create ft-rails/ subfolder (for a Dockerfile in a Dockerfile...)
 				FROM ft-rails:on-build									(use previously built image as a base and launch the ONBUILD triggers)
 
 				EXPOSE 3000												(indicate the port on which the container listens for connections)
-				CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000"]		(bind all IPv4 addresses on the local machine and port 3000 to the server)
+				CMD ["rails", "s", "-b", "0.0.0.0", "-p", "3000"]		(launch the rails server, bind all IPv4 addresses on the local machine and port 3000)
 
 		RUN.SH SCRIPT (IN "ROOT"):
 				cd ft-rails/															(goto ft-rails/)
@@ -326,6 +326,7 @@ ex02:	Create ft-rails/ subfolder (for a Dockerfile in a Dockerfile...)
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ex03:	
+
 
 
 
