@@ -62,6 +62,9 @@ INSTALL DOCKER:
 					** -p <ip-de-char>:5000:80 (you can specify host's ip 192.168.99.100)
 			-d						(run in background = detached mode)
 
+		-> curl http://192.168.99.101:5000
+		-> docker inspect -f {{.HostConfig.RestartPolicy}} overlord
+
 		TEST: http://<ip-de-char>:5000 on your web browser.
 			-> Welcome to nginx! ...
 
@@ -184,7 +187,7 @@ INSTALL DOCKER:
 27:		docker service logs -f engineering-bay
 
 28:		docker service create --name marines --network overmind --replicas=2 -e OC_USERNAME=user -e OC_PASSWD=password 42school/marine-squad
-			-> docker service inspect -f "{{.Spec.TaskTemplate.ContainerSpec.Env}}" marines 
+			-> docker service inspect -f "{{.Spec.TaskTemplate.ContainerSpec.Env}}" marines
 					[OC_USERNAME=user OC_PASSWD=password]
 			-> docker service logs -f marines
 			-> docker service logs marines
@@ -199,6 +202,8 @@ INSTALL DOCKER:
 31:		docker service rm $(docker service ls -q)
 			-> docker service ls
 					NO services...
+
+		* wc -l 31 32 33 34 (count the lines for exercises 31-34)
 
 32:		docker rm -f $(docker ps -a -q)
 			-> docker ps
@@ -224,19 +229,20 @@ ex00:	MY DOCKERFILE:
 			ENTRYPOINT ["vi", "test.c"]
 
 		TO BUILD THE IMAGE:
-		docker build -t <name> .
+		docker build -t ex00 .
 			(OR		docker build -t <name> -f /path/to/Dockerfile .)
 		
 		TO CHECK:
 		docker image ls
 				REPOSITORY		TAG			IMAGE ID			CREATED				SIZE
-				simpanssi		latest		c5767044cd8a		4 seconds ago		34.3MB
+				ex00			latest		c5767044cd8a		4 seconds ago		34.3MB
 				alpine			latest		a24bb4013296		4 months ago		5.57MB
 		
-		docker run -it --name <name> <image>
+		TO RUN IT:
+		docker run -it --name my_alpine ex00
 		-> docker ps
 				CONTAINER ID	IMAGE		COMMAND				CREATED				STATUS			PORTS		NAMES
-				3ab543515667	simpanssi	"vi test.c"			3 seconds ago		Up 2 seconds				gg
+				3ab543515667	ex00		"vi test.c"			3 seconds ago		Up 2 seconds				my_alpine
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -255,11 +261,11 @@ ex01:	MY DOCKERFILE:
 			ENTRYPOINT sh ts3server_startscript.sh
 		
 		TO BUILD THE IMAGE:
-		docker build -t <name> .
+		docker build -t ex01 .
 
 		TO RUN THE SERVER:
-		docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -d <image>
-		#docker run --name <name> -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -e TS3SERVER_LICENSE=accept -d <image>
+		docker run --name my_teamspeak -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -d ex01
+		#docker run --name my_teamspeak -p 9987:9987/udp -p 10011:10011 -p 30033:30033 -e TS3SERVER_LICENSE=accept -d ex01
 
 		TO CHECK:
 		docker image ls
@@ -271,7 +277,7 @@ ex01:	MY DOCKERFILE:
 				CONTAINER ID	IMAGE		COMMAND					CREATED			STATUS			PORTS																		NAMES
 				1288bb8acc5d	paviaani	"/bin/sh -c 'sh ts3s…"	4 minutes ago	Up 4 minutes	0.0.0.0:10011->10011/tcp, 0.0.0.0:9987->9987/udp, 0.0.0.0:30033->30033/tcp	my_teamspeak
 
-		docker logs <name> (to check the log and/or admin password etc.)
+		docker logs my_teamspeak (to check the log and/or admin password etc.)
 
 		OPEN TEAMSPEAK 3 CLIENT:
 		(ts3server://192.168.99.100:10011)
@@ -315,7 +321,7 @@ ex02:	Create ft-rails/ subfolder (for a Dockerfile in a Dockerfile...)
 
 		-> http://192.168.99.100:3000/
 
-		docker logs -f <image>
+		docker logs -f my_rubyapp
 				=> Booting Puma
 				=> Rails 5.2.0 application starting in development 
 				=> Run `rails server -h` for more startup options
@@ -421,7 +427,7 @@ ex01:	MY DOCKERFILE:
 			docker run -d --name bonus2 -p 80:80 twentyfortyeight
 		
 		-> bash run.sh
-		-> http://192.168.99.100/
+		-> http://192.168.99.101/
 
 ex02:	MY DOCKERFILE:
 
@@ -470,3 +476,4 @@ USEFUL COMMANDS:
 • docker rmi $(docker images -q) -f (remove all images)
 • docker volume rm $(docker volume ls -q)	(remove all volumes)
 • docker service rm $(docker service ls -q)	(remove all services)
+• docker network prune -f	(remove all unused networks)
