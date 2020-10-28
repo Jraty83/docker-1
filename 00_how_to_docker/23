@@ -1,1 +1,3 @@
 docker network create -d overlay --internal overmind
+
+# docker network ls

@@ -1,1 +1,8 @@
 docker run --name roach-warden --link spawning-pool:db -p 8081:80 -d phpmyadmin
+
+# http://192.168.99.101:8081/
+
+# Username:	root
+# Password:	Kerrigan
+
+# zerlings > wp_users...

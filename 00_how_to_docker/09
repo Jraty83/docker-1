@@ -1,4 +1,22 @@
-#docker run -it --rm debian
+# docker run -it --rm debian
 
 apt-get update -y && apt-get upgrade -y
 apt-get install build-essential vim git -y
+
+# git clone https://github.com/docker/docker.git
+#
+# vi test.c
+#
+# #include <stdio.h>
+#
+# int	main(void)
+# {
+#	printf("Hello Yellow!\n");
+#	return (0);
+# }
+#
+# gcc -Wall -Wextra -Werror test.c
+# ./a.out
+#
+# exit
+# docker ps -a

@@ -1,3 +1,10 @@
 docker run --name lair --link spawning-pool:mysql -p 8080:80 -d wordpress
 
 #docker run --name lair --link spawning-pool:mysql -p 192.168.99.100:8080:80 -d wordpress
+
+# http://192.168.99.101:8080
+
+# docker exec -it lair /bin/bash
+# cat wp-config.php | grep DB_NAME
+#
+# exit

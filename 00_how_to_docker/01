@@ -1,1 +1,9 @@
 docker-machine create --driver virtualbox Char
+
+# STOP...
+# increase Base Memory to 5000 MB
+# increase Processor(s) to 2 CPU
+# increase Video Memory to 128 MB
+# START!
+
+# docker-machine ls

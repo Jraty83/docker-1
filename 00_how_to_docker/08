@@ -1,1 +1,5 @@
 docker run -it --rm alpine
+
+# whoami
+# exit
+# docker ps -a

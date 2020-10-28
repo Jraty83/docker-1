@@ -1,1 +1,3 @@
 docker service scale marines=20
+
+# docker service ps marines

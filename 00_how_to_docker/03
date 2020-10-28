@@ -1,3 +1,5 @@
 eval $(docker-machine env Char)
 
 #(docker-machine regenerate-certs Char) - to regenerate certs if necessary
+
+# copy paste command to terminal if bash doesn't work

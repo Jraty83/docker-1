@@ -1,4 +1,1 @@
 docker service logs -f engineering-bay
-
-# docker service ps engineering-bay
-# docker service logs -f <TASK>

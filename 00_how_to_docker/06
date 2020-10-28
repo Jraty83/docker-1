@@ -1,3 +1,6 @@
 docker run --name overlord --restart always -p 5000:80 -d nginx
 
 #docker run --name overlord --restart always -p 192.168.99.100:5000:80 -d nginx
+
+# curl http://192.168.99.101:5000
+# docker inspect -f {{.HostConfig.RestartPolicy}} overlord
