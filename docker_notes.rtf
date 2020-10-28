@@ -31,7 +31,7 @@ INSTALL DOCKER:
 
 00_HOW_TO_DOCKER:
 
-01:		docker-machine create Char
+01:		docker-machine create --driver virtualbox Char
 
 02:		docker-machine ip Char
 
@@ -372,8 +372,25 @@ ex03:	MY DOCKERFILE:
 
 02_BONUS:
 
-b01:	
+ex00:	MY DOCKERFILE:
 
+			FROM debian
+			MAINTAINER Janne Raty <jraty@student.hive.fi>
+			RUN apt-get update \
+				&& apt-get upgrade -y \
+				&& apt-get install vim -y
+			ENTRYPOINT ["vi", "test.c"]
+
+		RUN SCRIPT:
+
+			#!/bin/sh
+
+			docker build -t debian_vim .
+			docker run -it --name bonus1 --rm debian_vim
+		
+		-> bash run.sh
+
+ex01:	
 
 
 
