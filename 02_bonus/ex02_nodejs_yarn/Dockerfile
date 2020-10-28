@@ -7,3 +7,10 @@ RUN apt-get update && apt-get upgrade -y && \
 	apt-get install -y nodejs npm git build-essential vim
 RUN npm install npm --global
 RUN npm install yarn --global
+
+# TO TEST:
+# node -v
+# yarn add yarn
+# yarn install
+# (yarn init)
+# ...

@@ -11,3 +11,6 @@ COPY js/ /usr/share/nginx/html/js/
 
 # Tell Docker we are going to use this port
 EXPOSE 80
+
+# TO TEST:
+# http://192.168.99.101/
