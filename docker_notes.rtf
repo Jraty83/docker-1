@@ -379,6 +379,7 @@ ex00:	MY DOCKERFILE:
 			RUN apt-get update \
 				&& apt-get upgrade -y \
 				&& apt-get install vim -y
+			RUN echo "CODING WITH VIM INSIDE DEBIAN!!" > test.c
 			ENTRYPOINT ["vi", "test.c"]
 
 		RUN SCRIPT:
@@ -414,21 +415,33 @@ ex01:	MY DOCKERFILE:
 			cp Dockerfile 2048/Dockerfile
 			cd 2048
 			docker build -t twentyfortyeight .
-			docker run -d -p 80:80 twentyfortyeight
+			docker run -d --name bonus2 -p 80:80 twentyfortyeight
 		
 		-> bash run.sh
 		-> http://192.168.99.100/
 
-ex02:	
+ex02:	MY DOCKERFILE:
 
+			FROM ubuntu
+			LABEL maintainer="jraty@student.hive.fi"
+			RUN apt-get update && apt-get upgrade -y && \
+				apt-get install -y tzdata && \
+				apt-get install -y nodejs npm git build-essential vim
+			RUN npm install npm --global
+			RUN npm install yarn --global
 
+		RUN SCRIPT:
 
+			#!/bin/sh
 
+			docker build -t ex02 .
+			docker run -it --name bonus3 --rm ex02
 
-
-
-
-
+		(-> yarn init)
+		-> node -v
+		-> yarn add yarn
+		-> yarn install
+		   ...
 
 ######################################################################################################################################################################
 
