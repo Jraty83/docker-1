@@ -34,6 +34,9 @@ INSTALL DOCKER:
 01:		docker-machine create --driver virtualbox Char
 
 02:		docker-machine ip Char
+			-> increase Base Memory to 5000 MB
+			-> increase Processor(s) to 2 CPU
+			-> increase Video Memory to 128 MB
 
 03:		eval $(docker-machine env Char) - you have to create the environment for EACH terminal!!
 		(env
@@ -461,5 +464,9 @@ USEFUL COMMANDS:
 • docker stop <name> (stop container(s)) - use "NAMES"
 
 • docker-machine rm <name> (to remove a machine)
+• docker node rm <name> (to remove a node)
 
+• docker rm -f $(docker ps -a -q)	(remove all containers)
 • docker rmi $(docker images -q) -f (remove all images)
+• docker volume rm $(docker volume ls -q)	(remove all volumes)
+• docker service rm $(docker service ls -q)	(remove all services)
